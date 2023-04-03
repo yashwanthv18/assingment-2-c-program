@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define BUFFER_SIZE 1024
+
+int main() 
+{
+    FILE *inputFile, *errorFile;
+    char buffer[BUFFER_SIZE];
+    char *match = "error";
+    char *line;
+    
+    // Open the input file for reading
+    inputFile = fopen("input.txt", "r");
+    if (inputFile == NULL) {
+        printf("Failed to open input file.\n");
+        exit(1);
+    }
+    
+    // Open the error log file for writing
+    errorFile = fopen("error_log.txt", "w");
+    if (errorFile == NULL) {
+        printf("Failed to open error log file.\n");
+        exit(1);
+    }
+    
+    // Read each line of the input file
+    while (fgets(buffer, BUFFER_SIZE, inputFile)) {
+        // Check if the line contains the match string
+        if (strstr(buffer, match) != NULL) {
+            // Write the line to the error log file
+            fprintf(errorFile, "%s", buffer);
+        }
+    }
+    
+    // Close the input and error log files
+    fclose(inputFile);
+    fclose(errorFile);
+    
+    // Open the error log file for reading
+    errorFile = fopen("error_log.txt", "r");
+    if (errorFile == NULL) {
+        printf("Failed to open error log file.\n");
+        exit(1);
+    }
+    
+    // Read each line of the error log file and print to console
+    while (fgets(buffer, BUFFER_SIZE, errorFile)) 
+    {
+        printf("%s", buffer);
+    }
+    
+    // Close the error log file
+    fclose(errorFile);
+     return 0;
+}
